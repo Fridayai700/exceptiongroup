@@ -883,7 +883,7 @@ def test_exceptions_mutate_original_sequence():
     exceptions.append(KeyError("bar"))
     assert excgrp.exceptions is exc_tuple
     if sys.version_info < (3, 11):
-        # The backport snapshots repr at creation time (this PR's fix)
+        # The backport uses the frozen _exceptions tuple for repr (this PR's fix)
         assert repr(excgrp) == (
             "BaseExceptionGroup('foo', [ValueError(1), KeyboardInterrupt()])"
         )
