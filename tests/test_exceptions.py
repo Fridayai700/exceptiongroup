@@ -882,14 +882,9 @@ def test_exceptions_mutate_original_sequence():
 
     exceptions.append(KeyError("bar"))
     assert excgrp.exceptions is exc_tuple
-    if sys.version_info < (3, 11):
-        # Backport: repr should reflect the original exceptions, not the
-        # mutated list (matches CPython fix: cpython#141736)
-        assert repr(excgrp) == (
-            "BaseExceptionGroup('foo', [ValueError(1), KeyboardInterrupt()])"
-        )
-    elif sys.version_info >= (3, 13, 12) or sys.version_info >= (3, 14):
-        # CPython 3.13.12+ and 3.14+ include the fix
+    if sys.version_info < (3, 11) or sys.version_info >= (3, 13, 12):
+        # In the backport and 3.13.12+, the repr should reflect the original
+        # exceptions, not the mutated list (matches CPython fix: cpython#141736)
         assert repr(excgrp) == (
             "BaseExceptionGroup('foo', [ValueError(1), KeyboardInterrupt()])"
         )
