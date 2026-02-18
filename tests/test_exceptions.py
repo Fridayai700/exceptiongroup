@@ -882,10 +882,9 @@ def test_exceptions_mutate_original_sequence():
 
     exceptions.append(KeyError("bar"))
     assert excgrp.exceptions is exc_tuple
-    if sys.version_info < (3, 11):
-        # The backport uses the frozen _exceptions tuple for repr (this PR's fix)
+    if sys.version_info < (3, 11) or sys.version_info >= (3, 13, 12):
+        # In the backport and 3.13.12+, the repr should reflect the original
+        # exceptions, not the mutated list (matches CPython fix: cpython#141736)
         assert repr(excgrp) == (
             "BaseExceptionGroup('foo', [ValueError(1), KeyboardInterrupt()])"
         )
-    # On native CPython 3.11+, the repr behavior depends on whether
-    # cpython#141736 has been fixed in each release branch — no assertion
